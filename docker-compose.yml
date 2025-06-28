@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_DB: customerdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend/springboot-reactjs-postgresql
+    container_name: backend_container
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/customerdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend/reactjs-springboot-postgresql
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+
