@@ -15,7 +15,7 @@ services:
       - "5432:5432"
 
   backend:
-    build: ./backend/springboot-reactjs-postgresql
+    build: ./backend
     container_name: backend_container
     restart: always
     environment:
@@ -28,11 +28,11 @@ services:
       - "8080:8080"
 
   frontend:
-    build: ./frontend/reactjs-springboot-postgresql
+    build: ./frontend
     container_name: frontend_container
     restart: always
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
 
